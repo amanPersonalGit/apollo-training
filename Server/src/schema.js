@@ -7,9 +7,14 @@ type Messages {
 
 type Query {
     users: [User]
+    friends(
+    name: String!
+    ): [String]
     user(
-    id: ID!
+    name: String!
+    email: String!
     ): User
+    messages:[Messages]
 }
 
 type User {
@@ -17,7 +22,6 @@ type User {
     name: String!
     email: String!
     friends: [ID]
-    messages: [Messages]
 }
 
 type Mutation {
