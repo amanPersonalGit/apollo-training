@@ -23,7 +23,6 @@ class GetUser extends React.Component {
         {({ loading, error, data }) => {
             if (loading) return <CircularProgress />;
             if (error) return `Error!: ${error}`;
-            console.log(data.user.name);
             return <GetFriends from={data.user.name} />
         }}
         </Query>

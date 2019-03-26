@@ -17,7 +17,6 @@ const client = new ApolloClient({
   cache,
   link
 })
-
 class App extends Component {
   render() {
     return (

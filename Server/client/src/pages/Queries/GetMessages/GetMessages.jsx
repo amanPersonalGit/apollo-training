@@ -1,9 +1,8 @@
 import React from 'react';
 import { Query } from "react-apollo";
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import gql from "graphql-tag";
+import MessageSent from '../../Subscriptions';
 
 const MESSAGES = gql`
     query{
@@ -23,13 +22,12 @@ class GetMessages extends React.Component {
     render() {
         const { to, from } = this.props;
         return (
-            <Query query={MESSAGES}>
-            {({ loading, error, data }) => {
-                if (loading) return <CircularProgress />;
-                if (error) return `Error!: ${error}`;
-                console.log(data);
-                return <h1>Hello</h1>
-            }}
+            <Query query={MESSAGES} pollInterval={300}>
+                {({ loading, error, data, subscribeToMore }) => {
+                    if (loading) return <CircularProgress />;
+                    if (error) return `Error!: ${error}`;
+                    return <MessageSent messages={data.messages} subscribeToMore={subscribeToMore} to={to} from={from} />
+                }}
             </Query>
         );
     }

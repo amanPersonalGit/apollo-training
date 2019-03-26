@@ -23,8 +23,7 @@ class GetFriends extends React.Component {
             {({ loading, error, data }) => {
                 if (loading) return <CircularProgress />;
                 if (error) return `Error!: ${error}`;
-                console.log(data.friends);
-                return data.friends.map(to => <div><Link color="inherit" underline="none" component={RouterLink} to={`/start/${from}/${to}`}>{to}</Link></div> );
+                return data.friends.map(to => <div style={{textAlign:'center', margin:10}}><Link color="inherit" underline="none" component={RouterLink} to={`/start/${from}/${to}`}>{to}</Link></div> );
             }}
             </Query>
         );
