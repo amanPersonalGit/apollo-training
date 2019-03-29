@@ -3,10 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
-import { Link as RouterLink } from 'react-router-dom';
-import Link from '@material-ui/core/Link';
 import { GetMessages } from '../Queries';
 import Send from '@material-ui/icons/Send';
 import { TextField, InputAdornment, IconButton } from '@material-ui/core';
@@ -89,7 +86,6 @@ class ChatBox extends React.Component {
                             <CloseIcon />
                         </IconButton>
                     </Toolbar>
-
                 </AppBar>
                 <div style={{ overflow: "scroll", height: 570 }}>
                     <GetMessages to={to} from={from} />

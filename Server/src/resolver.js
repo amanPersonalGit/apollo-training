@@ -49,8 +49,9 @@ const resolvers = {
                 id: Users.length + 1,
                 name: name,
                 email: email,
-                friends: [],
+                friends: Users.map(user => user.id),
             }
+            Users.forEach(user => user.friends.push(newUser.id));
             Users.push(newUser);
             pubsub.publish(USER_CREATED, { userCreated: newUser })
             return newUser;

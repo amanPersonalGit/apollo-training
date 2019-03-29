@@ -6,21 +6,34 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { GetUser } from '../Queries'
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+
+const ADD_USER = gql`
+mutation AddUser($username: String!, $useremail: String!){
+    addUser(name: $username, email: $useremail){
+        name
+    }
+}`;
 
 class Start extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             open: false,
+            newUser: false,
             name: '',
+            username: '',
             email: '',
+            useremail: '',
             hitQuery: false,
+            addUser: false,
         }
     }
 
     handlechange = field => (event) => {
         this.setState({
-        [field]: event.target.value,
+            [field]: event.target.value,
         });
     };
 
@@ -28,28 +41,48 @@ class Start extends React.Component {
         this.setState({ open: true });
     };
 
+    handleUserOpen = () => {
+        this.setState({ newUser: true });
+    };
+
     handleClose = () => {
-        this.setState({ open: false });
+        this.setState({ open: false, newUser: false });
     };
 
     handleSubmit = () => {
         this.setState({
             open: false,
-            hitQuery:true,
+            hitQuery: true,
         });
     };
 
-        
+    handleClick = (e, addUser, username, useremail) => {
+        e.preventDefault();
+        addUser({ variables: { username, useremail } });
+        this.setState({
+            newUser: false,
+            addUser: true,
+        })
+    }
+
     render() {
-        const { name, email,hitQuery } = this.state;
+        const { name, email, hitQuery, username, useremail, addUser } = this.state;
         return (
             <div>
                 <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
-                    Start
+                    Login
+                </Button>
+                <Button variant="outlined" color="primary" onClick={this.handleUserOpen}>
+                    Create User
                 </Button>
                 {
                     (hitQuery) ? (
                         <GetUser name={name} email={email} />
+                    ) : ''
+                }
+                {
+                    (addUser) ? (
+                        <GetUser name={username} email={useremail} />
                     ) : ''
                 }
                 <Dialog
@@ -86,6 +119,47 @@ class Start extends React.Component {
                             Login
                         </Button>
                     </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.newUser}
+                    onClose={this.handleClose}
+                    aria-labelledby="form-dialog-title"
+                >
+                    <DialogTitle id="form-dialog-title">Enter Details</DialogTitle>
+                    <DialogContent>
+                        <TextField
+                            value={username}
+                            label="Name *"
+                            fullWidth
+                            onClick={this.handlechange('username')}
+                            onChange={this.handlechange('username')}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                        <TextField
+                            value={useremail}
+                            label="Email Address"
+                            fullWidth
+                            onClick={this.handlechange('useremail')}
+                            onChange={this.handlechange('useremail')}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </DialogContent>
+                    <Mutation mutation={ADD_USER}>
+                        {(addUser, { data }) => (
+                            <DialogActions>
+                                <Button onClick={this.handleClose} color="primary">
+                                    Cancel
+                        </Button>
+                                <Button onClick={(e) => {
+                                    this.handleClick(e, addUser, username, useremail)
+                                }} color="primary">
+                                    Create
+                        </Button>
+                            </DialogActions>
+                        )}
+                    </Mutation>
                 </Dialog>
             </div>
         );
