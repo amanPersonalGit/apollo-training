@@ -1,4 +1,5 @@
 const Users = require('./constants/User');
+const Messages = require('./constants/Messages');
 const CHAT_CHANNEL = 'CHAT_CHANNEL';
 const USER_CREATED = 'USER_CREATED';
 
@@ -7,25 +8,39 @@ const resolvers = {
         users(root, args, context) {
             return Users;
         },
-        user(root, { id }, context) {
-            let theUser;
+        friends(root, { name }, context) {
+            let Friends = [];
             Users.forEach(user => {
-                if(user.id == id) {
-                    theUser = user;
+                if(user.name == name) {
+                    return user.friends.map(id => {
+                        Users.forEach(myUser => {
+                            if(myUser.id == id) {
+                                Friends.push(myUser.name);
+                            }
+                        })
+                    });
                 }
             });
-            return theUser;
+            return Friends;
         },
+        user(root, { name, email }, context) {
+            let newUser;
+            Users.forEach(user => {
+                if(user.name == name && user.email == email) {
+                    newUser = user;
+                }
+            });
+            return newUser;
+        },
+        messages(root, args, context) {
+            return Messages;
+        }
     },
 
     Mutation: {
         sendMessage(root, { to, from, message }, { pubsub }) {
             const chat = { to, from, message };
-            Users.forEach(user => {
-                if(user.name == to) {
-                    user.messages.push(chat);
-                }
-            })
+            Messages.push(chat);
             pubsub.publish(CHAT_CHANNEL, { messageSent: chat })
             return chat;
         },
@@ -35,7 +50,6 @@ const resolvers = {
                 name: name,
                 email: email,
                 friends: [],
-                messages: [],
             }
             Users.push(newUser);
             pubsub.publish(USER_CREATED, { userCreated: newUser })
