@@ -65,6 +65,7 @@ class MessageSent extends React.Component {
                     );
                 }
             }
+            return null;
             });
     }
 }
