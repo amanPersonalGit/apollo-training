@@ -36,11 +36,19 @@ class Start extends React.Component {
     };
 
     handleClickOpen = () => {
-        this.setState({ open: true });
+        this.setState({
+            open: true,
+            name: '',
+            email: '',
+        });
     };
 
     handleUserOpen = () => {
-        this.setState({ newUser: true });
+        this.setState({
+            newUser: true,
+            username: '',
+            useremail: '',
+        });
     };
 
     handleClose = () => {
