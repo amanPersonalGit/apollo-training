@@ -14,7 +14,10 @@ type Query {
     name: String!
     email: String!
     ): User
-    messages:[Messages]
+    messages(
+        to: String!
+        from: String!
+    ):[Messages]
 }
 
 type User {

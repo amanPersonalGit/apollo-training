@@ -26,12 +26,10 @@ class Start extends React.Component {
             username: '',
             email: '',
             useremail: '',
-            hitQuery: false,
-            addUser: false,
         }
     }
 
-    handlechange = field => (event) => {
+    handleChange = field => (event) => {
         this.setState({
             [field]: event.target.value,
         });
@@ -50,23 +48,36 @@ class Start extends React.Component {
     };
 
     handleSubmit = () => {
+        const {name, email} = this.state;
+        if(name !== '' && email !== '') {
+            window.localStorage.setItem('Name', name);
+            window.localStorage.setItem('Email', email);
+        }
         this.setState({
             open: false,
-            hitQuery: true,
         });
     };
 
+    handleLogout = () => {
+        const { history } = this.props;
+        window.localStorage.clear();
+        history.push('/start');
+    }
+
     handleClick = (e, addUser, username, useremail) => {
         e.preventDefault();
+        if(username !== '' &&  useremail !== ''){
+            window.localStorage.setItem('Name', username);
+            window.localStorage.setItem('Email', useremail);
+        }
         addUser({ variables: { username, useremail } });
         this.setState({
             newUser: false,
-            addUser: true,
         })
     }
 
     render() {
-        const { name, email, hitQuery, username, useremail, addUser } = this.state;
+        const { name, email, username, useremail } = this.state;
         return (
             <div>
                 <Button variant="outlined" color="primary" onClick={this.handleClickOpen}>
@@ -75,16 +86,10 @@ class Start extends React.Component {
                 <Button variant="outlined" color="primary" onClick={this.handleUserOpen}>
                     Create User
                 </Button>
-                {
-                    (hitQuery) ? (
-                        <GetUser name={name} email={email} />
-                    ) : ''
-                }
-                {
-                    (addUser) ? (
-                        <GetUser name={username} email={useremail} />
-                    ) : ''
-                }
+                <Button variant="outlined" color="primary" onClick={this.handleLogout}>
+                    Log Out
+                </Button>
+                        <GetUser/>
                 <Dialog
                     open={this.state.open}
                     onClose={this.handleClose}
@@ -96,8 +101,8 @@ class Start extends React.Component {
                             value={name}
                             label="Name *"
                             fullWidth
-                            onClick={this.handlechange('name')}
-                            onChange={this.handlechange('name')}
+                            onClick={this.handleChange('name')}
+                            onChange={this.handleChange('name')}
                             margin="normal"
                             variant="outlined"
                         />
@@ -105,8 +110,8 @@ class Start extends React.Component {
                             value={email}
                             label="Email Address"
                             fullWidth
-                            onClick={this.handlechange('email')}
-                            onChange={this.handlechange('email')}
+                            onClick={this.handleChange('email')}
+                            onChange={this.handleChange('email')}
                             margin="normal"
                             variant="outlined"
                         />
@@ -131,8 +136,8 @@ class Start extends React.Component {
                             value={username}
                             label="Name *"
                             fullWidth
-                            onClick={this.handlechange('username')}
-                            onChange={this.handlechange('username')}
+                            onClick={this.handleChange('username')}
+                            onChange={this.handleChange('username')}
                             margin="normal"
                             variant="outlined"
                         />
@@ -140,8 +145,8 @@ class Start extends React.Component {
                             value={useremail}
                             label="Email Address"
                             fullWidth
-                            onClick={this.handlechange('useremail')}
-                            onChange={this.handlechange('useremail')}
+                            onClick={this.handleChange('useremail')}
+                            onChange={this.handleChange('useremail')}
                             margin="normal"
                             variant="outlined"
                         />

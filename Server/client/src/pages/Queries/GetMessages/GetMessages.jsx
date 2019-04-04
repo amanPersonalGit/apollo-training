@@ -5,8 +5,8 @@ import gql from "graphql-tag";
 import MessageSent from '../../Subscriptions';
 
 const MESSAGES = gql`
-    query{
-        messages{
+    query Messages($to: String!, $from: String!){
+        messages(to: $to, from: $from){
             to
             from
             message
@@ -22,7 +22,7 @@ class GetMessages extends React.Component {
     render() {
         const { to, from } = this.props;
         return (
-            <Query query={MESSAGES}>
+            <Query query={MESSAGES} variables={{ to, from }}>
                 {({ loading, error, data, subscribeToMore }) => {
                     if (loading) return <CircularProgress />;
                     if (error) return `Error!: ${error}`;

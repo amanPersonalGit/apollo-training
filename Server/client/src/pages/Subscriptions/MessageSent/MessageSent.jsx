@@ -23,7 +23,7 @@ class MessageSent extends React.Component {
             document: CHAT_CHANNEL,
             updateQuery: (prev, { subscriptionData }) => {
                 if (!subscriptionData.data) return prev;
-                console.log(subscriptionData);
+                console.log("subscriptionData", subscriptionData);
                 return {
                     messages: [
                         ...prev.messages,

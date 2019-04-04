@@ -32,8 +32,14 @@ const resolvers = {
             });
             return newUser;
         },
-        messages(root, args, context) {
-            return Messages;
+        messages(root, { to, from }, context) {
+            UserMessages = [];
+            Messages.forEach(message => {
+                if((message.to == to && message.from == from)||(message.to == from && message.from == to)) {
+                    UserMessages.push(message);
+                }
+            })
+            return UserMessages;
         }
     },
 

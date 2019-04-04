@@ -18,15 +18,19 @@ class GetUser extends React.Component {
     }
 
     render (){
-        const { name, email } = this.props;
-        return <Query query={GET_USERS} variables={{ name, email }}>
-        {({ loading, error, data }) => {
-            if (loading) return <CircularProgress />;
-            if (error) return `Error!: ${error}`;
-            if(data.user != null) return <GetFriends from={data.user.name} />
-            return null;
-        }}
-        </Query>
+        const name = window.localStorage.getItem('Name');
+        const email = window.localStorage.getItem('Email');
+        if(name&&email){
+            return <Query query={GET_USERS} variables={{ name, email }}>
+            {({ loading, error, data }) => {
+                if (loading) return <CircularProgress />;
+                if (error) return `Error!: ${error}`;
+                if(data.user != null) return <GetFriends from={data.user.name} />
+                return null;
+            }}
+            </Query>
+        }
+        return null;
     }
 }
 
